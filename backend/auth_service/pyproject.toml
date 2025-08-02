@@ -10,5 +10,6 @@ dependencies = [
     "pydantic>=2.11.7",
     "pydantic-settings>=2.10.1",
     "redis>=6.2.0",
+    "telethon>=1.40.0",
     "uvicorn>=0.35.0",
 ]
