@@ -30,9 +30,8 @@ class RedisStorage(Redis):
             return [record for record in data]
 
     async def put_record(
-        self,  key: str, record: Any, expires_in: int | None = None
+        self, key: str, record: Any, expires_in: int | None = None
     ) -> None:
-
         expires_in = expires_in or settings.redis.expire
         await self.set(name=key, value=record, ex=expires_in)
 
@@ -42,6 +41,7 @@ class RedisStorage(Redis):
 
 
 redis_storage: RedisStorage | None = None
+
 
 @lru_cache
 def get_redis() -> RedisStorage | None:

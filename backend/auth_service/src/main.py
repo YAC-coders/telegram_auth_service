@@ -7,14 +7,12 @@ from fastapi.responses import ORJSONResponse
 
 from core.logger import LOGGING
 from core.settings import settings
-
+from api.v1 import router as v1_router
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     logging.info("Starup the application")
-    redis_storage.redis_storage = redis_storage.RedisStorage()
-    object_storage.object_storage = object_storage.ObjectStorage()
     yield
     logging.info("Stop the application")
 
