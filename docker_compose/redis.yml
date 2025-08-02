@@ -1,10 +1,6 @@
 services:
   redis:
     image: redis:latest
-    expose:
-      - "${REDIS__PORT}"
-    volumes:
-      - redis-storage:/data
     command: >
       sh -c '
         mkdir -p /usr/local/etc/redis &&

@@ -1,0 +1,6 @@
+services:
+  nginx:
+  image: nginx:1.27.4
+  ports:
+    - "${APP_PORT_HOST}:80"
+  restart: unless-stopped
