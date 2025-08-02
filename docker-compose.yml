@@ -20,7 +20,8 @@ services:
     expose:
       - "${UVICORN__PORT}"
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
 
   redis:
     extends:
