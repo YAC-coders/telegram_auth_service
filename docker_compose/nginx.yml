@@ -1,4 +1,4 @@
 services:
   nginx:
-  image: nginx:1.27.5
-  restart: unless-stopped
+    image: nginx:1.27.5
+    restart: unless-stopped
