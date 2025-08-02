@@ -1,0 +1,6 @@
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    restart: unless-stopped
