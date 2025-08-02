@@ -65,7 +65,7 @@ class ProjectSettings(BaseSettings):
     title: str = Field(..., description="The project's title", min_length=3)
     description: str = Field(..., description="The project's description", min_length=3)
 
-    api_v1: str = Field(default="/api/v1", description="The api v1 string")
+    api_v1: str = Field(default="/v1", description="The api v1 string")
 
 
 class Settings:

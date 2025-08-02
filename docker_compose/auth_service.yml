@@ -1,6 +1,6 @@
 services:
   auth_service:
     build:
-      context: ../backend
-      dockerfile: ../docker/backend/Dockerfile
+      context: ../backend/auth_service
+      dockerfile: ../../docker/backend/Dockerfile
     restart: unless-stopped

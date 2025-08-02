@@ -22,6 +22,7 @@ app = FastAPI(
     title=settings.project.title,
     description=settings.project.description,
     default_response_class=ORJSONResponse,
+    root_path="/api"
 )
 
 app.include_router(router=v1_router)
