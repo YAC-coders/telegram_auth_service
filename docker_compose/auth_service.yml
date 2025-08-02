@@ -1,5 +1,5 @@
 services:
-  backend:
+  auth_service:
     build:
       context: ../backend
       dockerfile: ../docker/backend/Dockerfile
