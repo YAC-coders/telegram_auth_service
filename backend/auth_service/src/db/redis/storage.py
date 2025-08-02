@@ -2,7 +2,7 @@ from functools import lru_cache
 import logging
 from typing import Any
 
-from redis import Redis
+from redis.asyncio import Redis
 
 from core.settings import settings
 
