@@ -23,6 +23,15 @@ services:
       redis:
         condition: service_healthy
 
+  frontend:
+    extends:
+      file: ./docker_compose/frontend.yml
+      service: frontend
+    env_file:
+      - ./.env
+    expose:
+      - "9000"
+
   redis:
     extends:
       file: ./docker_compose/redis.yml
