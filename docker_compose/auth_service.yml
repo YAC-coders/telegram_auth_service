@@ -4,5 +4,3 @@ services:
       context: ../backend
       dockerfile: ../docker/backend/Dockerfile
     restart: unless-stopped
-    expose:
-      - "${UVICORN_PORT}"
