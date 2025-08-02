@@ -29,12 +29,11 @@ Before installation, ensure you have:
 
 ## Technologies Used
 
-* **Authentication Service**: Python (3.13)
-    + Framework: FastAPI (0.116.0)
-    + Database: Redis (8.0.3)
-* **Frontend**: NodeJS (22.17)
-    + Framework: Quasar (2.18.1)
-
+- **Authentication Service**: Python (3.13)
+  - Framework: FastAPI (0.116.0)
+  - Database: Redis (8.0.3)
+- **Frontend**: NodeJS (22.14)
+  - Framework: Quasar (2.5.0)
 
 ## Installation and Usage
 
@@ -66,10 +65,9 @@ make
 
 This will start up the necessary services for the Telegram Auth service.
 
-
 ## Contributors
 
 This project is maintained by:
 
-* [Vitaly Menkeev](https://github.com/VitalyMenkeev)
-* [Ivan Kolesnikov](https://github.com/VanyaKolesnikov)
+- [Vitaly Menkeev](https://github.com/VitalyMenkeev)
+- [Ivan Kolesnikov](https://github.com/VanyaKolesnikov)
