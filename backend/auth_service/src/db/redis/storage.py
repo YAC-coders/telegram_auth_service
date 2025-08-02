@@ -1,3 +1,4 @@
+from functools import lru_cache
 import logging
 from typing import Any
 
@@ -42,6 +43,6 @@ class RedisStorage(Redis):
 
 redis_storage: RedisStorage | None = None
 
-
+@lru_cache
 def get_redis() -> RedisStorage | None:
     return redis_storage
