@@ -5,8 +5,10 @@ from service.auth import (
     get_send_code_service,
     ValidateCodeService,
     get_validate_code_service,
+    ValidatePasswordService,
+    get_validate_password_service,
 )
-from schema.auth import SendCodeRequest, ValidateCodeRequest
+from schema.auth import SendCodeRequest, ValidateCodeRequest, ValidatePasswordRequest
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -34,5 +36,14 @@ async def validate_code(
 
 
 @router.post(path="/validate_password")
-async def validate_password():
-    pass
+async def validate_password(
+    validate_password_request: ValidatePasswordRequest = Body(
+        description="Neccessary info to verify telegram code."
+    ),
+    validate_password_service: ValidatePasswordService = Depends(
+        get_validate_password_service
+    ),
+):
+    return await validate_password_service.validate(
+        validate_password_request=validate_password_request
+    )
