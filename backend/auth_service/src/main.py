@@ -20,12 +20,13 @@ async def lifespan(_: FastAPI):
     yield
     logging.info("Stop the application")
 
+
 app = FastAPI(
     lifespan=lifespan,
     title=settings.project.title,
     description=settings.project.description,
     default_response_class=ORJSONResponse,
-    root_path="/api"
+    root_path="/api",
 )
 
 app.include_router(router=v1_router)

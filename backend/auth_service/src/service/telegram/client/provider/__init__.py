@@ -1,4 +1,3 @@
-
 from .string import SimpleStringClientProvider, ProxyStringClientProvider
 from .protocol import ProviderProtocol
 
