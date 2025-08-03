@@ -5,7 +5,7 @@ from fastapi import Depends
 from db.redis.storage import RedisStorage, get_redis
 from db.object.storage import ObjectStorage, get_object_storage
 from service.crypt import CryptRepository, get_crypt_repo
-from src.schema.auth.validate_code import ValidateCodeRequest, ValidateCodeResponse
+from schema.auth.validate_code import ValidateCodeRequest, ValidateCodeResponse
 
 
 class ValidateCodeService:
