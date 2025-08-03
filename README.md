@@ -16,6 +16,8 @@ This project provides auth proccess via Telegram.
 
 Telegram auth service
 
+![Systemc architecture](image_url "./arch/system.png")
+
 ## Features
 
 Telegram auth service features
