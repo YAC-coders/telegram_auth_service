@@ -13,6 +13,7 @@ from schema.auth import (
     ValidateCodeRequest,
     ValidatePasswordRequest,
     SendCodeResponse,
+    ValidateCodeResponse
 )
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -56,13 +57,40 @@ async def send_code(
     return await send_code_service.send_code(send_code_request=send_code_request)
 
 
-@router.post(path="/validate_code")
+@router.post(path="/validate_code",
+    summary="Sign in by telegram code.",
+    response_model=ValidateCodeResponse,
+    status_code=status.HTTP_200_OK,
+    responses={
+        status.HTTP_200_OK: {
+            "model": ValidateCodeResponse,
+            "description": "Sign in by code was successfully.",
+        },
+        status.HTTP_400_BAD_REQUEST: {"description": "Something went wrong"},
+    },)
 async def validate_code(
     validate_code_request: ValidateCodeRequest = Body(
         description="Neccessary info to verify telegram code."
     ),
     validate_code_service: ValidateCodeService = Depends(get_validate_code_service),
-):
+) -> ValidateCodeResponse:
+    """`Authenticates` Telegram account using received verification `code`.
+
+    Endpoint handler that:
+    1. Validates verification code
+    2. Completes Telegram authentication
+    3. Initiates background data download
+
+    Args:
+    - account_auth: AccountAuthCode model containing:
+        - registration_session: Handler reference
+        - code: Received verification code
+        - registration_id: Database registration ID
+
+    Status Codes:
+    - `200`: Authentication successful (background tasks started).
+    - `400`: Something went wrong
+    """
     return await validate_code_service.validate(
         validate_code_request=validate_code_request
     )
