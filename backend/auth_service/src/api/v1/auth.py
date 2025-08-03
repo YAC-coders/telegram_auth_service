@@ -3,8 +3,12 @@ from fastapi import APIRouter, Body, Depends
 from service.auth import (
     SendCodeService,
     get_send_code_service,
+    ValidateCodeService,
+    get_validate_code_service,
+    ValidatePasswordService,
+    get_validate_password_service,
 )
-from schema.auth import SendCodeRequest
+from schema.auth import SendCodeRequest, ValidateCodeRequest, ValidatePasswordRequest
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -19,12 +23,27 @@ async def send_code(
     return await send_code_service.send_code(send_code_request=send_code_request)
 
 
-
 @router.post(path="/validate_code")
-async def validate_code():
-    pass
+async def validate_code(
+    validate_code_request: ValidateCodeRequest = Body(
+        description="Neccessary info to verify telegram code."
+    ),
+    validate_code_service: ValidateCodeService = Depends(get_validate_code_service),
+):
+    return await validate_code_service.validate(
+        validate_code_request=validate_code_request
+    )
 
 
 @router.post(path="/validate_password")
-async def validate_password():
-    pass
+async def validate_password(
+    validate_password_request: ValidatePasswordRequest = Body(
+        description="Neccessary info to verify telegram code."
+    ),
+    validate_password_service: ValidatePasswordService = Depends(
+        get_validate_password_service
+    ),
+):
+    return await validate_password_service.validate(
+        validate_password_request=validate_password_request
+    )
