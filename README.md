@@ -1,6 +1,8 @@
 # Telegram Auth Service
 
-This project provides auth proccess via Telegram.
+A secure and scalable authentication service leveraging Telegram's API for user verification and session management.
+
+![System architecture](./arch/system.png)
 
 ## Table of Contents
 
@@ -14,18 +16,28 @@ This project provides auth proccess via Telegram.
 
 ## Overview
 
-Telegram auth service
+The Telegram Auth Service provides seamless authentication using Telegram's API, enabling applications to:
+- Verify user identity via Telegram credentials
+- Manage user sessions securely
+
+This service acts as a middleware between your application and Telegram's authentication system, handling all the complex verification processes while providing a simple API interface.
 
 ## Features
 
-Telegram auth service features
+- **Telegram Login Integration**
+- **Session Management**
+- **Scalable Architecture**
 
 ## Prerequisites
 
 Before installation, ensure you have:
 
-- Docker Engine 24.0+ and Docker Compose 2.20+
-- Telegram API ID and API HASH
+- **Docker**: Engine 24.0+ and Docker Compose 2.20+
+- **Telegram API Credentials**:
+  - API ID (obtain from [my.telegram.org](https://my.telegram.org))
+  - API HASH (obtain from [my.telegram.org](https://my.telegram.org))
+- **Hardware**:
+  - Minimum: 1 CPU cores, 2GB RAM
 
 ## Technologies Used
 
