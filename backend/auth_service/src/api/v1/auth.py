@@ -13,8 +13,9 @@ from schema.auth import (
     ValidateCodeRequest,
     ValidatePasswordRequest,
     SendCodeResponse,
-    ValidateCodeResponse
-)
+    ValidateCodeResponse,
+    ValidatePasswordResponse
+    )
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -96,7 +97,18 @@ async def validate_code(
     )
 
 
-@router.post(path="/validate_password")
+@router.post(path="/validate_password"
+    ,
+    summary="Sign in by cloud password.",
+    response_model=ValidatePasswordResponse,
+    status_code=status.HTTP_200_OK,
+    responses={
+        status.HTTP_200_OK: {
+            "model": ValidatePasswordResponse,
+            "description": "Sign in by cloud password was successfully.",
+        },
+        status.HTTP_400_BAD_REQUEST: {"description": "Something went wrong"},
+    },)
 async def validate_password(
     validate_password_request: ValidatePasswordRequest = Body(
         description="Neccessary info to verify telegram code."
@@ -104,7 +116,24 @@ async def validate_password(
     validate_password_service: ValidatePasswordService = Depends(
         get_validate_password_service
     ),
-):
+) -> ValidatePasswordResponse:
+    """`Authenticates` Telegram account using `cloud password` (2FA).
+
+    Endpoint handler that:
+    1. Validates cloud password
+    2. Completes Telegram authentication
+    3. Initiates background data download
+
+    Args:
+    - account_auth: AccountAuthPassword model containing:
+        - registration_session: Handler reference
+        - password: Cloud password
+        - registration_id: Database registration ID
+
+    Status Codes:
+    - `200`: Authentication successfull.
+    - `400`: Something went wrong.
+    """
     return await validate_password_service.validate(
         validate_password_request=validate_password_request
     )
