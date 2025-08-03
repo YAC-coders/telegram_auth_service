@@ -1,0 +1,39 @@
+@startuml
+skinparam componentStyle uml2
+skinparam monochrome false
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+
+left to right direction
+
+' Actors
+actor Client
+
+' Proxy
+rectangle "Proxy" {
+  component Nginx #lightblue
+}
+
+' Application
+rectangle "Application" #F5F5F5 {
+  component Frontend #lightgreen
+  component AuthService #lightgreen
+}
+
+' Storage
+rectangle "Storage" #E8F5E9 {
+  database Redis #orange
+  database Object #orange
+}
+
+' Connections
+Client --> Nginx: "Request"
+
+' Nginx
+Nginx --> Frontend: "Request to registration"
+
+' AuthService
+Frontend <--> AuthService: "Authentification"
+AuthService <--> Redis: "Create and read PhoneNumber/ClientID pairs"
+AuthService <--> Object: "Create and read ClientId/Connection object pairs"
+@enduml
