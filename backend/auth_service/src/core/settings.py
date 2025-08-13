@@ -1,8 +1,17 @@
 from typing import Literal
+import os
 
 from cryptography.fernet import Fernet
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
+
+
+class PathSettings:
+    base: str = os.getcwd()
+
+    media_dir: str = os.path.join(base, "media")
+
+    session_dir: str = os.path.join(media_dir, "session")
 
 
 class CryptSettings(BaseSettings):
@@ -75,6 +84,7 @@ class Settings:
     redis: RedisCacheSettings = RedisCacheSettings()
     proxy: ProxySettings = ProxySettings()
     crypt: CryptSettings = CryptSettings()
+    path: PathSettings = PathSettings()
 
 
 settings = Settings()

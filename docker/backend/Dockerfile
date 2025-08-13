@@ -29,6 +29,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 FROM base AS final
 
+RUN apt-get update &&  \
+    apt-get install -y --no-install-recommends curl && \
+    apt-get clean
+
 COPY --from=builder --chown=$PYSETUP_PATH:$PYSETUP_PATH $WORKDIR_PATH $WORKDIR_PATH
 
 CMD ["python", "src/main.py"]
