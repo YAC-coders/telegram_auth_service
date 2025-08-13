@@ -12,10 +12,11 @@ from service.telegram.client.provider import (
 
 
 class ClientRepository:
-    __slots__ = ("string",)
+    __slots__ = ("string", "sqlite")
 
     def __init__(self) -> None:
         self.string = self.String()
+        self.sqlite = self.SQLite()
 
     class String:
         __slots__ = ()
