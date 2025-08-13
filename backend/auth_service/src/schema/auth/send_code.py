@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
@@ -26,3 +28,6 @@ class SendCodeResponse(BaseModel):
     model_config = ConfigDict(frozen=True, extra="ignore")
 
     session: str = Field(..., description="The session string.")
+    step: Literal["validate_code", "validate_password"] = Field(
+        ..., description="Auth step."
+    )
