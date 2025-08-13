@@ -3,9 +3,6 @@ services:
     extends:
       file: ./docker_compose/nginx.yml
       service: nginx
-    volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
     depends_on:
       auth_service:
         condition: service_healthy

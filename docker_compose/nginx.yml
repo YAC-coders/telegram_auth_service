@@ -1,4 +1,6 @@
 services:
   nginx:
-    image: nginx:1.27.5
+    build:
+      context: ../nginx
+      dockerfile: ../docker/nginx/Dockerfile
     restart: unless-stopped
