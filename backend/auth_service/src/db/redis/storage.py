@@ -39,6 +39,10 @@ class RedisStorage(Redis):
         await self.rpush(name=key, *records)  # type: ignore
         await self.expire(name=key, time=settings.redis.expire)
 
+    async def record_exists(self, key: str) -> bool:
+        result = await self.exists(key)
+        return bool(result)
+
 
 redis_storage: RedisStorage | None = None
 
