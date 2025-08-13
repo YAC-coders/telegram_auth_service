@@ -4,3 +4,9 @@ services:
       context: ../backend/auth_service
       dockerfile: ../../docker/backend/Dockerfile
     restart: unless-stopped
+    healthcheck:
+      test: curl --fail http://localhost:${UVICORN__PORT}/api/v1/healthcheck || exit 1
+      interval: 2s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
