@@ -6,6 +6,8 @@ from service.telegram.client.entity import Client
 from service.telegram.client.provider import (
     SimpleStringClientProvider,
     ProxyStringClientProvider,
+    SimpleSQLiteClientProvider,
+    ProxySQLiteClientProvider,
 )
 
 
@@ -23,6 +25,19 @@ class ClientRepository:
 
         def proxy(self) -> TelegramClient:
             return Client(provider=ProxyStringClientProvider()).create()
+
+    class SQLite:
+        __slots__ = ()
+
+        def simple(self, phone_number: str) -> TelegramClient:
+            return Client(
+                provider=SimpleSQLiteClientProvider(phone_number=phone_number)
+            ).create()
+
+        def proxy(self, phone_number: str) -> TelegramClient:
+            return Client(
+                provider=ProxySQLiteClientProvider(phone_number=phone_number)
+            ).create()
 
 
 @lru_cache

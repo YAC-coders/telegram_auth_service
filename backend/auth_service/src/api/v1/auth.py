@@ -14,8 +14,8 @@ from schema.auth import (
     ValidatePasswordRequest,
     SendCodeResponse,
     ValidateCodeResponse,
-    ValidatePasswordResponse
-    )
+    ValidatePasswordResponse,
+)
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -58,7 +58,8 @@ async def send_code(
     return await send_code_service.send_code(send_code_request=send_code_request)
 
 
-@router.post(path="/validate_code",
+@router.post(
+    path="/validate_code",
     summary="Sign in by telegram code.",
     response_model=ValidateCodeResponse,
     status_code=status.HTTP_200_OK,
@@ -68,7 +69,8 @@ async def send_code(
             "description": "Sign in by code was successfully.",
         },
         status.HTTP_400_BAD_REQUEST: {"description": "Something went wrong"},
-    },)
+    },
+)
 async def validate_code(
     validate_code_request: ValidateCodeRequest = Body(
         description="Neccessary info to verify telegram code."
@@ -97,8 +99,8 @@ async def validate_code(
     )
 
 
-@router.post(path="/validate_password"
-    ,
+@router.post(
+    path="/validate_password",
     summary="Sign in by cloud password.",
     response_model=ValidatePasswordResponse,
     status_code=status.HTTP_200_OK,
@@ -108,7 +110,8 @@ async def validate_code(
             "description": "Sign in by cloud password was successfully.",
         },
         status.HTTP_400_BAD_REQUEST: {"description": "Something went wrong"},
-    },)
+    },
+)
 async def validate_password(
     validate_password_request: ValidatePasswordRequest = Body(
         description="Neccessary info to verify telegram code."
