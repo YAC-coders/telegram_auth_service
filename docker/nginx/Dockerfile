@@ -1,3 +1,9 @@
-FROM nginx:1.27.5
+FROM nginx:1.29.0-alpine
 
-COPY . /etc/nginx
+WORKDIR /etc/nginx
+
+COPY . .
+
+RUN rm -f /etc/nginx/conf.d/default.conf
+
+EXPOSE 80 443

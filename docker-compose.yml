@@ -6,6 +6,8 @@ services:
     depends_on:
       auth_service:
         condition: service_healthy
+      frontend:
+        condition: service_started
     ports:
       - "${APP__PORT}:80"
 
