@@ -10,13 +10,21 @@ class ObjectStorage:
         self.storage = {}
 
     def put_record(self, key: str, record: Any) -> None:
-        logging.info("Try to save data in object storage. Key: %s", key)
+        logging.info("Save data in object storage. Key: %s", key)
         self.storage.update({key: record})
         return None
 
     def get_record(self, key: str) -> Any | None:
-        logging.info("Try to retrieve data from object storage. Key: %s", key)
+        logging.info("Retrieve data from object storage. Key: %s", key)
         return self.storage.get(key)
+
+    def record_exists(self, key: str) -> bool:
+        logging.info("Check the record existence by key.")
+        return True if self.storage.get(key) else False
+
+    def delete_record(self, key: str):
+        logging.info("Retrieve data from object storage. Key: %s", key)
+        self.storage.pop(key, None)
 
 
 object_storage: ObjectStorage | None = None
