@@ -22,6 +22,10 @@ class ObjectStorage:
         logging.info("Check the record existence by key.")
         return True if self.storage.get(key) else False
 
+    def delete_record(self, key: str):
+        logging.info("Retrieve data from object storage. Key: %s", key)
+        self.storage.pop(key, None)
+
 
 object_storage: ObjectStorage | None = None
 
