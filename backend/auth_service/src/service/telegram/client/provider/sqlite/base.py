@@ -18,7 +18,6 @@ class BaseSQLiteClientProvider(BaseClientProvider):
     def _create_path(file: str) -> str:
         return os.path.join(settings.path.session_dir, file)
 
-
     @staticmethod
     def _check_session_existence(path: str) -> bool:
         return os.path.exists(path=path)
