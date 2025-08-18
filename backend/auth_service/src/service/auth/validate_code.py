@@ -21,18 +21,25 @@ class ValidateCodeService:
         self._object_storage = object_storage
         self._crypt_repo = crypt_repo
 
-    async def validate(self, validate_code_request: ValidateCodeRequest):
+    async def validate(
+        self, validate_code_request: ValidateCodeRequest
+    ) -> ValidateCodeResponse:
         phone_number = self._crypt_repo.decrypt(value=validate_code_request.session)
 
-        client_id = await self._redis_storage.get_record(key=phone_number)
-        if client_id:
-            client = self._object_storage.get_record(key=client_id.decode("utf-8"))
-            if client:
-                await client.sign_in(code=validate_code_request.code)
-                return ValidateCodeResponse(session=validate_code_request.session)
+        client_info = self._object_storage.get_record(key=phone_number)
+        if client_info:
+            client = client_info.get("client")
+            await client.sign_in(code=validate_code_request.code)
+            return ValidateCodeResponse(
+                session=validate_code_request.session, step="final"
+            )
         else:
             logging.warning(
-                "Telegram code was expired. Account phone number: %s", phone_number
+                "Telegram connection was corrupted or was expired. Account phone number: %s",
+                phone_number,
+            )
+            return ValidateCodeResponse(
+                session=validate_code_request.session, step="send_code"
             )
 
 
