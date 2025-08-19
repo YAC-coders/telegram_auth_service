@@ -22,7 +22,6 @@ rectangle "Application" #F5F5F5 {
 
 ' Storage
 rectangle "Storage" #E8F5E9 {
-  database Redis #orange
   database Object #orange
 }
 
@@ -34,6 +33,5 @@ Nginx --> Frontend: "Request to registration"
 
 ' AuthService
 Frontend <--> AuthService: "Authentification"
-AuthService <--> Redis: "Create and read PhoneNumber/ClientID pairs"
-AuthService <--> Object: "Create and read ClientId/Connection object pairs"
+AuthService <--> Object: "Create and read PhoneNumber/Connection objects"
 @enduml
