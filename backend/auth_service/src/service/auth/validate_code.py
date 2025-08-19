@@ -1,6 +1,8 @@
 import logging
+import datetime
 
 from fastapi import Depends
+from telethon import errors
 
 from db.redis.storage import RedisStorage, get_redis
 from db.object.storage import ObjectStorage, get_object_storage
@@ -28,19 +30,45 @@ class ValidateCodeService:
 
         client_info = self._object_storage.get_record(key=phone_number)
         if client_info:
-            client = client_info.get("client")
-            await client.sign_in(code=validate_code_request.code)
-            return ValidateCodeResponse(
-                session=validate_code_request.session, step="final"
-            )
-        else:
-            logging.warning(
-                "Telegram connection was corrupted or was expired. Account phone number: %s",
-                phone_number,
-            )
-            return ValidateCodeResponse(
-                session=validate_code_request.session, step="send_code"
-            )
+            if client_info.get("step") == "validate_code":
+                registration_timedelta = (
+                    datetime.datetime.now() - client_info.get("timestamp")
+                ).seconds
+                if registration_timedelta < 300:
+                    client = client_info.get("client")
+
+                    try:
+                        await client.sign_in(code=validate_code_request.code)
+                        return ValidateCodeResponse(
+                            session=validate_code_request.session, step="final"
+                        )
+                    except errors.SessionPasswordNeededError:
+                        logging.info("Fail to login via code. Need cloud password.")
+                        return ValidateCodeResponse(
+                            session=validate_code_request.session, step="validate_password"
+                        )
+
+                logging.info(
+                    "Registration time was expired for phone: %s",
+                    phone_number,
+                )
+                self._object_storage.delete_record(key=phone_number)
+                return ValidateCodeResponse(
+                    session=validate_code_request.session, step="send_code"
+                )
+
+            else:
+                return ValidateCodeResponse(
+                    session=validate_code_request.session, step=client_info.get("step")
+                )
+
+        logging.warning(
+            "Telegram connection was corrupted or was expired. Account phone number: %s",
+            phone_number,
+        )
+        return ValidateCodeResponse(
+            session=validate_code_request.session, step="send_code"
+        )
 
 
 def get_validate_code_service(
