@@ -21,9 +21,6 @@ services:
       - "${UVICORN__PORT}"
     volumes:
       - sessions:/app/media/session
-    depends_on:
-      redis:
-        condition: service_healthy
 
   frontend:
     extends:
@@ -34,17 +31,5 @@ services:
     expose:
       - "8080"
 
-  redis:
-    extends:
-      file: ./docker_compose/redis.yml
-      service: redis
-    expose:
-      - "${REDIS__PORT}"
-    volumes:
-      - redis-storage:/data
-    env_file:
-      - ./.env
-
 volumes:
-  redis-storage:
   sessions:
