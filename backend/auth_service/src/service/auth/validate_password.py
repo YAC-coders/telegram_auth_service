@@ -2,7 +2,6 @@ import logging
 
 from fastapi import Depends
 
-from db.redis.storage import RedisStorage, get_redis
 from db.object.storage import ObjectStorage, get_object_storage
 from schema.auth import ValidatePasswordRequest, ValidatePasswordResponse
 from service.crypt import CryptRepository, get_crypt_repo
@@ -41,12 +40,10 @@ class ValidatePasswordService:
 
 
 def get_validate_password_service(
-    redis_storage: RedisStorage = Depends(get_redis),
     object_storage: ObjectStorage = Depends(get_object_storage),
     crypt_repo: CryptRepository = Depends(get_crypt_repo),
 ) -> ValidatePasswordService:
     return ValidatePasswordService(
-        redis_storage=redis_storage,
         object_storage=object_storage,
         crypt_repo=crypt_repo,
     )
