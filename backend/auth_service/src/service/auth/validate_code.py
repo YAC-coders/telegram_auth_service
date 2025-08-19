@@ -11,7 +11,7 @@ from schema.auth.validate_code import ValidateCodeRequest, ValidateCodeResponse
 
 
 class ValidateCodeService:
-    __slots__ = ("_redis_storage", "_object_storage", "_crypt_repo")
+    __slots__ = ("_object_storage", "_crypt_repo")
 
     def __init__(
         self,
@@ -44,7 +44,7 @@ class ValidateCodeService:
         self, validate_code_request: ValidateCodeRequest
     ) -> ValidateCodeResponse:
         phone_number = self._crypt_repo.decrypt(value=validate_code_request.session)
-        client_info = await self._get_client_info(phone_number)
+        client_info = await self._get_client_info(phone_number=phone_number)
 
         if not client_info:
             logging.warning(
