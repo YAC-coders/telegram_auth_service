@@ -11,6 +11,11 @@ class ClientCheckHandler:
     __slots__ = ()
 
     @staticmethod
+    async def disconnect_from_telegram_server(client: TelegramClient):
+        logging.info("Disconnect %s from telegram servers", client.session)
+        await client.disconnect()
+
+    @staticmethod
     def remove_session_file(phone_number):
         path = os.path.join(settings.path.session_dir, f"{phone_number}.session")
         try:

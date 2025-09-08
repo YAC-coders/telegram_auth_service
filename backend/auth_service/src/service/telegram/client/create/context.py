@@ -43,6 +43,7 @@ class ClientCreateContext:
                     raise AlreadyLoggedIn(
                     f"Account with phone number: {phone_number} already logged in."
                 )
+                await self._client_check_handler.disconnect_from_telegram_server(client=client)
                 return client
 
             self._client_check_handler.remove_session_file(
