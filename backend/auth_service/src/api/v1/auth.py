@@ -16,7 +16,7 @@ from schema.auth import (
     ValidateCodeResponse,
     ValidatePasswordResponse,
 )
-from exception.telegram import AlreadyLoggedIn
+from exception.telegram import AlreadyLoggedIn, CodeExpired, PasswordExpired
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -74,7 +74,8 @@ async def send_code(
             "model": ValidateCodeResponse,
             "description": "Sign in by code was successfully.",
         },
-        status.HTTP_400_BAD_REQUEST: {"description": "Something went wrong"},
+        status.HTTP_400_BAD_REQUEST: {"description": "Something went wrong."},
+        status.HTTP_409_CONFLICT: {"description": "Telegram sent code expired."},
     },
 )
 async def validate_code(
@@ -99,10 +100,14 @@ async def validate_code(
     Status Codes:
     - `200`: Authentication successful (background tasks started).
     - `400`: Something went wrong
+    - `409`: Code expired
     """
-    return await validate_code_service.validate(
-        validate_code_request=validate_code_request
-    )
+    try:
+        return await validate_code_service.validate(
+            validate_code_request=validate_code_request
+        )
+    except CodeExpired:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Code expired.")
 
 
 @router.post(
@@ -142,7 +147,11 @@ async def validate_password(
     Status Codes:
     - `200`: Authentication successfull.
     - `400`: Something went wrong.
+    - `409`: Session password expired.
     """
-    return await validate_password_service.validate(
+    try:
+        return await validate_password_service.validate(
         validate_password_request=validate_password_request
     )
+    except PasswordExpired:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Password expired")
