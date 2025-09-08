@@ -55,17 +55,6 @@ class ProxySettings(BaseSettings):
     port: int = Field(description="proxy port", ge=1024)
 
 
-class RedisCacheSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="REDIS__", frozen=True, extra="ignore")
-
-    db: int = Field(default=0, description="redis database number.")
-    username: str = Field(..., description="redis user's name.")
-    password: str = Field(..., description="redis user's password.", repr=False)
-    host: str = Field(default="redis", description="redis database host.")
-    port: int = Field(default=6379, description="redis database port.", ge=1024)
-    expire: int = Field(default=10 * 60, description="time to expire.")
-
-
 class ProjectSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="PROJECT__", frozen=True, extra="forbid"
@@ -81,7 +70,6 @@ class Settings:
     uvcorn: UvicornSettings = UvicornSettings()
     project: ProjectSettings = ProjectSettings()
     telegram: TelegramSettings = TelegramSettings()
-    redis: RedisCacheSettings = RedisCacheSettings()
     proxy: ProxySettings = ProxySettings()
     crypt: CryptSettings = CryptSettings()
     path: PathSettings = PathSettings()
