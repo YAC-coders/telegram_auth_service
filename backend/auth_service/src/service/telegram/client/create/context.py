@@ -35,10 +35,10 @@ class ClientCreateContext:
             check_connection_result = await self._client_check_handler.check_connection(
                 client=client
             )
-            check_init_result = await self._client_check_handler.check_init_status(
-                client=client
-            )
             if check_connection_result:
+                check_init_result = await self._client_check_handler.check_init_status(
+                    client=client
+                )
                 if check_init_result:
                     raise AlreadyLoggedIn(
                     f"Account with phone number: {phone_number} already logged in."
