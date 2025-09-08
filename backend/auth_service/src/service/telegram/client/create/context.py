@@ -26,7 +26,7 @@ class ClientCreateContext:
         logging.info("Create simple telegram client.")
         return self._client_repo.sqlite.simple(phone_number=phone_number)
 
-    async def create(self, phone_number: str) -> TelegramClient | None:
+    async def create(self, phone_number: str) -> TelegramClient:
         client = self._create_client_instance(phone_number=phone_number)
         check_dir_result = self._client_check_handler.check_file_existence(
             phone_number=phone_number
