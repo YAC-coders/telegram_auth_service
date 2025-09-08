@@ -1,5 +1,6 @@
 from functools import lru_cache
 import logging
+import os
 
 from telethon import TelegramClient
 
@@ -9,8 +10,9 @@ from exception.telegram import AlreadyLoggedIn
 class ClientCheckHandler:
     __slots__ = ()
 
-    def check_file_existence(self) -> bool:
-        pass
+    @staticmethod
+    def check_file_existence(path: str) -> bool:
+        return os.path.exists(path=path)
 
     @staticmethod
     async def check_connection(client: TelegramClient) -> bool:
