@@ -8,6 +8,7 @@ from telethon import errors
 from db.object.storage import ObjectStorage, get_object_storage
 from service.crypt import CryptRepository, get_crypt_repo
 from schema.auth.validate_code import ValidateCodeRequest, ValidateCodeResponse
+from exception.telegram import CodeExpired
 
 
 class ValidateCodeService:
@@ -67,14 +68,12 @@ class ValidateCodeService:
             )
 
         if self._is_validation_expired(client_info.get("timestamp")):
-            logging.info(
+            logging.warning(
                 "Registration time was expired for phone: %s",
                 phone_number,
             )
             self._object_storage.delete_record(key=phone_number)
-            return ValidateCodeResponse(
-                session=validate_code_request.session, step="send_code"
-            )
+            raise CodeExpired("Registration time was expired for phone: %s")
 
         return await self._handle_successful_validation(
             client=client_info.get("client"),
