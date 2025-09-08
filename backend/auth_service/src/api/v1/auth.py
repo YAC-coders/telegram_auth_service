@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends, status
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 
 from service.auth import (
     SendCodeService,
@@ -16,6 +16,8 @@ from schema.auth import (
     ValidateCodeResponse,
     ValidatePasswordResponse,
 )
+from exception.telegram import AlreadyLoggedIn
+
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -31,6 +33,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
             "description": "Code sent successfully.",
         },
         status.HTTP_400_BAD_REQUEST: {"description": "Something went wrong"},
+        status.HTTP_409_CONFLICT: {"description": "Telegram account already logged in"},
     },
 )
 async def send_code(
@@ -54,9 +57,12 @@ async def send_code(
     Status Codes:
     - `200`: Verification code sent successfully
     - `400`: Something went wrong
+    - `409`: Already logged in
     """
-    return await send_code_service.send_code(send_code_request=send_code_request)
-
+    try:
+        return await send_code_service.send_code(send_code_request=send_code_request)
+    except AlreadyLoggedIn:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Already logged in.")
 
 @router.post(
     path="/validate_code",

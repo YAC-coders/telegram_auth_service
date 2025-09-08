@@ -1,14 +1,14 @@
 from telethon import TelegramClient
+from telethon.sessions import StringSession
 
 from core.settings import settings
-from service.telegram.client.provider.sqlite.base import BaseSQLiteClientProvider
+from service.telegram.client.create.provider.base import BaseClientProvider
 
 
-class ProxySQLiteClientProvider(BaseSQLiteClientProvider):
+class ProxyStringClientProvider(BaseClientProvider):
     def create(self) -> TelegramClient:
-        self._clean_dir()
         return TelegramClient(
-            session=self._create_path(file=self.phone_number),
+            session=StringSession(),
             api_id=self._api_id,
             api_hash=self._api_hash,
             proxy=(settings.proxy.scheme, settings.proxy.hostname, settings.proxy.port),

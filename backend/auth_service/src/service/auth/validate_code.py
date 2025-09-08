@@ -30,15 +30,20 @@ class ValidateCodeService:
         return datetime.datetime.now() - timestamp > datetime.timedelta(minutes=5)
 
     async def _handle_successful_validation(
-            self, client: TelegramClient, validate_code_request
-        ) -> ValidateCodeResponse:
+        self, client: TelegramClient, validate_code_request: ValidateCodeRequest, phone_number: str
+    ) -> ValidateCodeResponse:
         """Handle successful code validation."""
         try:
             await client.sign_in(code=validate_code_request.code)
-            return ValidateCodeResponse(session=validate_code_request.session, step="final")
+            self._object_storage.delete_record(key=phone_number)
+            return ValidateCodeResponse(
+                session=validate_code_request.session, step="final"
+            )
         except errors.SessionPasswordNeededError:
             logging.info("Fail to login via code. Need cloud password.")
-            return ValidateCodeResponse(session=validate_code_request.session, step='validate_password')
+            return ValidateCodeResponse(
+                session=validate_code_request.session, step="validate_password"
+            )
 
     async def validate(
         self, validate_code_request: ValidateCodeRequest
@@ -72,7 +77,9 @@ class ValidateCodeService:
             )
 
         return await self._handle_successful_validation(
-            client=client_info.get("client"), validate_code_request=validate_code_request
+            client=client_info.get("client"),
+            phone_number=phone_number,
+            validate_code_request=validate_code_request,
         )
 
 
