@@ -10,7 +10,6 @@ from core.settings import settings
 class ClientCheckHandler:
     __slots__ = ()
 
-
     @staticmethod
     def remove_session_file(phone_number):
         path = os.path.join(settings.path.session_dir, f"{phone_number}.session")
@@ -42,8 +41,8 @@ class ClientCheckHandler:
         if await client.is_user_authorized():
             logging.info("Account is authorized")
             await client.disconnect()
-            return False
-        return True
+            return True
+        return False
 
 
 @lru_cache

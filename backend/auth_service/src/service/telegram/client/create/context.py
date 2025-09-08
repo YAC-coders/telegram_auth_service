@@ -5,6 +5,7 @@ from fastapi import Depends
 from telethon import TelegramClient
 
 from core.settings import settings
+from exception.telegram import AlreadyLoggedIn
 from telegram.client.create.repository import ClientRepository, get_client_repository
 from telegram.client.check import ClientCheckHandler, get_client_check_handler
 
@@ -25,14 +26,28 @@ class ClientCreateContext:
         logging.info("Create simple telegram client.")
         return self._client_repo.sqlite.simple(phone_number=phone_number)
 
-    async def _check_client_instance(self, client: TelegramClient):
-        return await self._client_check_handler.check(client=client)
-
     async def create(self, phone_number: str) -> TelegramClient | None:
         client = self._create_client_instance(phone_number=phone_number)
-        check_result = await self._check_client_instance(client=client)
-        if not check_result:
-            return None
+        check_dir_result = self._client_check_handler.check_file_existence(
+            phone_number=phone_number
+        )
+        if check_dir_result:
+            check_connection_result = await self._client_check_handler.check_connection(
+                client=client
+            )
+            check_init_result = await self._client_check_handler.check_init_status(
+                client=client
+            )
+            if check_connection_result:
+                if check_init_result:
+                    raise AlreadyLoggedIn(
+                    f"Account with phone number: {phone_number} already logged in."
+                )
+                return client
+
+            self._client_check_handler.remove_session_file(
+                phone_number=phone_number
+            )
         return client
 
 
