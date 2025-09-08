@@ -2,7 +2,7 @@ import logging
 
 from telethon import TelegramClient
 
-from service.telegram.client.provider import ProviderProtocol
+from service.telegram.client.create.provider import ProviderProtocol
 
 
 class Client:

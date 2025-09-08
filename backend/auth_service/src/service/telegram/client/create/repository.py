@@ -2,8 +2,8 @@ from functools import lru_cache
 
 from telethon import TelegramClient
 
-from service.telegram.client.entity import Client
-from service.telegram.client.provider import (
+from service.telegram.client.create.entity import Client
+from service.telegram.client.create.provider import (
     SimpleStringClientProvider,
     ProxyStringClientProvider,
     SimpleSQLiteClientProvider,
