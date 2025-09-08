@@ -81,5 +81,5 @@ This will start up the necessary services for the Telegram Auth service.
 
 This project is maintained by:
 
-- [Vitaly Menkeev](https://github.com/VitalyMenkeev)
-- [Ivan Kolesnikov](https://github.com/VanyaKolesnikov)
+- [Vitaly Menkeev](https://github.com/VitalyMenkeev) (Arch, Frontend)
+- [Ivan Kolesnikov](https://github.com/VanyaKolesnikov) (Arch, Backend, Infra)
