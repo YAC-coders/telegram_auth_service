@@ -16,7 +16,7 @@ from schema.auth import (
     ValidateCodeResponse,
     ValidatePasswordResponse,
 )
-from exception.telegram import AlreadyLoggedIn, CodeExpired
+from exception.telegram import AlreadyLoggedIn, CodeExpired, PasswordExpired
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -147,7 +147,11 @@ async def validate_password(
     Status Codes:
     - `200`: Authentication successfull.
     - `400`: Something went wrong.
+    - `409`: Session password expired.
     """
-    return await validate_password_service.validate(
+    try:
+        return await validate_password_service.validate(
         validate_password_request=validate_password_request
     )
+    except PasswordExpired:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Password expired")
