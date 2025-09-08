@@ -6,8 +6,8 @@ from telethon import TelegramClient
 
 from core.settings import settings
 from exception.telegram import AlreadyLoggedIn
-from telegram.client.create.repository import ClientRepository, get_client_repository
-from telegram.client.check import ClientCheckHandler, get_client_check_handler
+from service.telegram.client.create.repository import ClientRepository, get_client_repository
+from service.telegram.client.check import ClientCheckHandler, get_client_check_handler
 
 
 class ClientCreateContext:
