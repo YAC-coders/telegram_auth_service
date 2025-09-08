@@ -4,14 +4,25 @@ import os
 
 from telethon import TelegramClient
 
-from exception.telegram import AlreadyLoggedIn
+from core.settings import settings
 
 
 class ClientCheckHandler:
     __slots__ = ()
 
+
     @staticmethod
-    def check_file_existence(path: str) -> bool:
+    def remove_session_file(phone_number):
+        path = os.path.join(settings.path.session_dir, f"{phone_number}.session")
+        try:
+            os.remove(path)
+            logging.info(f"Deleted: {path}")
+        except OSError as exception:
+            logging.warning("Error deleting %s. Error: %s", path, str(exception))
+
+    @staticmethod
+    def check_file_existence(phone_number: str) -> bool:
+        path = os.path.join(settings.path.session_dir, f"{phone_number}.session")
         return os.path.exists(path=path)
 
     @staticmethod
@@ -31,9 +42,7 @@ class ClientCheckHandler:
         if await client.is_user_authorized():
             logging.info("Account is authorized")
             await client.disconnect()
-            raise AlreadyLoggedIn(
-                f"Account with phone number: {self.phone_number} already logged in."
-            )
+            return False
         return True
 
 
