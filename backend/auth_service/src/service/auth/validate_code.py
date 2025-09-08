@@ -1,5 +1,6 @@
 import logging
 import datetime
+from typing import Any
 
 from fastapi import Depends
 from telethon import TelegramClient
@@ -31,7 +32,7 @@ class ValidateCodeService:
         return datetime.datetime.now() - timestamp > datetime.timedelta(minutes=5)
 
     async def _handle_successful_validation(
-        self, client: TelegramClient, validate_code_request: ValidateCodeRequest, phone_number: str
+        self, client: TelegramClient, validate_code_request: ValidateCodeRequest, phone_number: str, client_info: dict[str, Any]
     ) -> ValidateCodeResponse:
         """Handle successful code validation."""
         try:
@@ -42,6 +43,12 @@ class ValidateCodeService:
             )
         except errors.SessionPasswordNeededError:
             logging.info("Fail to login via code. Need cloud password.")
+            self._object_storage.update_record(key=phone_number, record={
+                "client": client,
+                "encrypted_phone_number": client_info.get("encrypted_phone_number"),
+                "step": "validate_password",
+                "timestamp": datetime.datetime.now(),
+            })
             return ValidateCodeResponse(
                 session=validate_code_request.session, step="validate_password"
             )
@@ -78,6 +85,7 @@ class ValidateCodeService:
         return await self._handle_successful_validation(
             client=client_info.get("client"),
             phone_number=phone_number,
+            client_info=client_info,
             validate_code_request=validate_code_request,
         )
 
