@@ -1,7 +1,6 @@
 from functools import lru_cache
 import logging
 
-from fastapi import Depends
 from telethon import TelegramClient
 
 from core.settings import settings
@@ -54,8 +53,8 @@ class ClientCreateContext:
 
 @lru_cache
 def get_client_create_context(
-    client_repo: ClientRepository = Depends(get_client_repository),
-    client_check_handler: ClientCheckHandler = Depends(get_client_check_handler),
+    client_repo: ClientRepository = get_client_repository(),
+    client_check_handler: ClientCheckHandler = get_client_check_handler(),
 ) -> ClientCreateContext:
     return ClientCreateContext(
         client_repo=client_repo, client_check_handler=client_check_handler
