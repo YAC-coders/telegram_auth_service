@@ -12,7 +12,7 @@ class ClientCheckHandler:
 
     @staticmethod
     async def disconnect_from_telegram_server(client: TelegramClient):
-        logging.info("Disconnect %s from telegram servers", client.session)
+        logging.info("Disconnect %s account from telegram servers", client.session)
         await client.disconnect()
 
     @staticmethod
@@ -26,6 +26,7 @@ class ClientCheckHandler:
 
     @staticmethod
     def check_file_existence(phone_number: str) -> bool:
+        logging.info("Check the %s account session file", phone_number)
         path = os.path.join(settings.path.session_dir, f"{phone_number}.session")
         return os.path.exists(path=path)
 
