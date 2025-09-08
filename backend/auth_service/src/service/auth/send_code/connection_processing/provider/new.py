@@ -8,7 +8,7 @@ from exception.telegram import AlreadyLoggedIn
 from service.auth.send_code.connection_processing.provider.interface import (
     ProviderInterface,
 )
-from service.telegram.client import ClientRepository, get_client_repository
+from service.telegram.client.create import ClientRepository, get_client_repository
 from service.crypt import CryptRepository, get_crypt_repo
 
 

@@ -2,7 +2,7 @@ from telethon import TelegramClient
 from telethon.sessions import StringSession
 
 from core.settings import settings
-from service.telegram.client.provider.base import BaseClientProvider
+from service.telegram.client.create.provider.base import BaseClientProvider
 
 
 class ProxyStringClientProvider(BaseClientProvider):
