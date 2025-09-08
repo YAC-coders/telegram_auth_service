@@ -8,13 +8,15 @@ from core.settings import settings
 from telegram.client.create.repository import ClientRepository, get_client_repository
 from telegram.client.check import ClientCheckHandler, get_client_check_handler
 
+
 class ClientCreateContext:
     __slots__ = ("_client_repo", "_client_check_handler")
 
-    def __init__(self, client_repo: ClientRepository, client_check_handler: ClientCheckHandler) -> None:
+    def __init__(
+        self, client_repo: ClientRepository, client_check_handler: ClientCheckHandler
+    ) -> None:
         self._client_repo = client_repo
         self._client_check_handler = client_check_handler
-
 
     def _create_client_instance(self, phone_number: str):
         if settings.telegram.use_proxy:
@@ -34,13 +36,11 @@ class ClientCreateContext:
         return client
 
 
-
 @lru_cache
 def get_client_create_context(
     client_repo: ClientRepository = Depends(get_client_repository),
-    client_check_handler: ClientCheckHandler = Depends(get_client_check_handler)
+    client_check_handler: ClientCheckHandler = Depends(get_client_check_handler),
 ) -> ClientCreateContext:
     return ClientCreateContext(
-        client_repo=client_repo,
-        client_check_handler=client_check_handler
+        client_repo=client_repo, client_check_handler=client_check_handler
     )
