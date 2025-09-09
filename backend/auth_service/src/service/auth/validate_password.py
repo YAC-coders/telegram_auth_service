@@ -6,13 +6,13 @@ from fastapi import Depends
 from telethon import TelegramClient
 
 from db.object.storage import ObjectStorage, get_object_storage
-from schema.auth import ValidatePasswordRequest, ValidatePasswordResponse
+from schema.auth import ValidatePasswordRequest, ValidatePasswordResponse, Step
 from service.crypt import CryptRepository, get_crypt_repo
 from exception.telegram import PasswordExpired
 
 
 class ValidatePasswordService:
-    STEP = "validate_password"
+    STEP = str(Step.validate_password)
     __slots__ = ("_object_storage", "_crypt_repo")
 
     def __init__(
@@ -39,7 +39,7 @@ class ValidatePasswordService:
             await client.sign_in(password=validate_password_request.password)
             self._object_storage.delete_record(key=phone_number)
             return ValidatePasswordResponse(
-                session=validate_password_request.session, step="final"
+                session=validate_password_request.session, step=str(Step.final)
             )
         except Exception as exception:
             logging.warning("Something went wrong when sign in via password. Error %s", str(exception))
@@ -55,7 +55,7 @@ class ValidatePasswordService:
                 phone_number,
             )
             return ValidatePasswordResponse(
-                session=validate_password_request.session, step="send_code"
+                session=validate_password_request.session, step=str(Step.send_code)
             )
 
         current_step = client_info.get("step")

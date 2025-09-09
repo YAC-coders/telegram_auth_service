@@ -8,12 +8,12 @@ from telethon import errors
 
 from db.object.storage import ObjectStorage, get_object_storage
 from service.crypt import CryptRepository, get_crypt_repo
-from schema.auth.validate_code import ValidateCodeRequest, ValidateCodeResponse
+from schema.auth import ValidateCodeRequest, ValidateCodeResponse, Step
 from exception.telegram import CodeExpired
 
 
 class ValidateCodeService:
-    STEP = "validate_code"
+    STEP = str(Step.validate_code)
     __slots__ = ("_object_storage", "_crypt_repo")
 
     def __init__(
@@ -40,18 +40,18 @@ class ValidateCodeService:
             await client.sign_in(code=validate_code_request.code)
             self._object_storage.delete_record(key=phone_number)
             return ValidateCodeResponse(
-                session=validate_code_request.session, step="final"
+                session=validate_code_request.session, step=str(Step.final)
             )
         except errors.SessionPasswordNeededError:
             logging.info("Fail to login via code. Need cloud password.")
             self._object_storage.update_record(key=phone_number, record={
                 "client": client,
                 "encrypted_phone_number": client_info.get("encrypted_phone_number"),
-                "step": "validate_password",
+                "step": str(Step.validate_password),
                 "timestamp": datetime.datetime.now(),
             })
             return ValidateCodeResponse(
-                session=validate_code_request.session, step="validate_password"
+                session=validate_code_request.session, step=str(Step.validate_password)
             )
 
     async def validate(
@@ -66,7 +66,7 @@ class ValidateCodeService:
                 phone_number,
             )
             return ValidateCodeResponse(
-                session=validate_code_request.session, step="send_code"
+                session=validate_code_request.session, step=str(Step.send_code)
             )
 
         current_step = client_info.get("step")

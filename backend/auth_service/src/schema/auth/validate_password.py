@@ -1,4 +1,3 @@
-from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -18,6 +17,6 @@ class ValidatePasswordRequest(BaseValidatePassword):
 class ValidatePasswordResponse(BaseValidatePassword):
     model_config = ConfigDict(frozen=True, extra="ignore")
 
-    step: Literal["send_code", "validate_password", "final"] = Field(
+    step: str = Field(
         ..., description="Auth step."
     )

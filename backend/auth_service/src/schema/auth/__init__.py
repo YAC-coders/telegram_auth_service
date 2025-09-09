@@ -1,7 +1,7 @@
 from .send_code import SendCodeRequest, SendCodeResponse
 from .validate_code import ValidateCodeRequest, ValidateCodeResponse
 from .validate_password import ValidatePasswordRequest, ValidatePasswordResponse
-from .step import k
+from .step import Step
 
 __all__ = (
     "SendCodeRequest",
