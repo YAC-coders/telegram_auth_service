@@ -12,6 +12,7 @@ from exception.telegram import PasswordExpired
 
 
 class ValidatePasswordService:
+    STEP = "validate_password"
     __slots__ = ("_object_storage", "_crypt_repo")
 
     def __init__(
@@ -58,7 +59,7 @@ class ValidatePasswordService:
             )
 
         current_step = client_info.get("step")
-        if current_step != "validate_code":
+        if current_step != self.STEP:
             return ValidatePasswordResponse(
                 session=validate_password_request.session, step=current_step
             )

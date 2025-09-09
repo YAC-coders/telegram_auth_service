@@ -13,6 +13,7 @@ from exception.telegram import CodeExpired
 
 
 class ValidateCodeService:
+    STEP = "validate_code"
     __slots__ = ("_object_storage", "_crypt_repo")
 
     def __init__(
@@ -69,7 +70,7 @@ class ValidateCodeService:
             )
 
         current_step = client_info.get("step")
-        if current_step != "validate_code":
+        if current_step != self.STEP:
             return ValidateCodeResponse(
                 session=validate_code_request.session, step=current_step
             )

@@ -12,6 +12,7 @@ from service.auth.send_code.connection_processing.provider import (
 
 
 class SendCodeService:
+    STEP = "send_code"
     __slots__ = ("_object_storage",)
 
     def __init__(
