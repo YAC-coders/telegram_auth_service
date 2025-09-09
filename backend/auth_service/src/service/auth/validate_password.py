@@ -23,7 +23,7 @@ class ValidatePasswordService:
         self._object_storage = object_storage
         self._crypt_repo = crypt_repo
 
-    async def _get_client_info(self, phone_number: str):
+    def _get_client_info(self, phone_number: str):
         """Retrieve client info from storage."""
         return self._object_storage.get_record(key=phone_number)
 
@@ -47,7 +47,7 @@ class ValidatePasswordService:
 
     async def validate(self, validate_password_request: ValidatePasswordRequest) -> ValidatePasswordResponse:
         phone_number = self._crypt_repo.decrypt(value=validate_password_request.session)
-        client_info = await self._get_client_info(phone_number=phone_number)
+        client_info = self._get_client_info(phone_number=phone_number)
 
         if not client_info:
             logging.warning(
